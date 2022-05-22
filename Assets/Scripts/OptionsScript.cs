@@ -13,15 +13,45 @@ public class OptionsScript : MonoBehaviour
 {
     //Panel de opciones
     public GameObject optionsPanel;
-    //Array para poner los 3 valores RGB
-    public TMP_InputField[] RGB;
-    //Imagen el player
-    public Image preview;
+
+    public GameObject[] colors;
+    private int colorSelected;
+
+    public TMP_InputField username;
+
+    public bool HardModeIsOn;
 
     void Start()
     {
         //Hacemos que los opciones no se vean al principio
         optionsPanel.SetActive(false);
+
+        LoadUserOptions();
+    }
+    private void Update()
+    {
+        ColorSelection();
+    }
+    public void SaveUserOptions()
+    {
+        // Persistencia de datos entre escenas
+        DataPersistence.sharedInstance.colorSelected = colorSelected;
+        DataPersistence.sharedInstance.color = colors[colorSelected].GetComponent<Image>().color;
+
+        DataPersistence.sharedInstance.username = username.text;
+
+        // Persistencia de datos entre partidas
+        DataPersistence.sharedInstance.SaveForFutureGames();
+    }
+    public void LoadUserOptions()
+    {
+        // Tal y como lo hemos configurado, si tiene esta clave, entonces tiene todas
+        if (PlayerPrefs.HasKey("COLOR_SELECTED"))
+        {
+            colorSelected = PlayerPrefs.GetInt("COLOR_SELECTED");
+
+            username.text = PlayerPrefs.GetString("USERNAME");
+        }
     }
     public void OptionsScene()
     {
@@ -33,44 +63,26 @@ public class OptionsScript : MonoBehaviour
         //Desaparece el panel de opciones al clicar el boton
         optionsPanel.SetActive(false);
     }
-    public bool IsValidRGB()
+    private void ColorSelection()
     {
-        //Comprobamos que el valor introducido por el usuario sea valido
-        foreach (var t in RGB)
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Debug.Log(t.text.GetType());
-            int.TryParse(t.text, out int val);
-            if (!ValueBetween(val, 0, 255))
-            {
-                return false;
-            }
+            colorSelected++;
         }
-        return true;
-    }
-    public void ApplyRGBColor()
-    {
-        //Cambiamos el color del player al introducio por el usuario
-        if (IsValidRGB())
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            preview.color = new Color(NormalizeValue(RGB[0].text, 255f),
-                NormalizeValue(RGB[1].text, 255f),
-                NormalizeValue(RGB[2].text, 255f));
-        }
-    }
-    private float NormalizeValue(string s, float max)
-    {
-        int val = int.Parse(s);
-        return val / max;
-    }
-
-    private bool ValueBetween(int val, int min, int max)
-    {
-        if (val >= min && val <= max)
-        {
-            return true;
+            colorSelected--;
         }
 
-        return false;
+        colorSelected %= 3;
+        ChangeColorSelection();
+    }
 
+    private void ChangeColorSelection()
+    {
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i].transform.GetChild(0).gameObject.SetActive(i == colorSelected);
+        }
     }
 }
