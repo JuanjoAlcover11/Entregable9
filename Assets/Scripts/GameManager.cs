@@ -1,36 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
-{
+{   //Declaramos las variables
     public static GameManager sharedInstance;
+    public TextMeshProUGUI HardToggle;
     public MeshRenderer player;
     public TextMeshProUGUI username;
-    public bool HardModeIsOn;
-
+ 
     private void Awake()
     {
+
         if (sharedInstance == null)
         {
             sharedInstance = this;
         }
         else
         {
+            //Si ya existe una instancia, se destruye
             Destroy(this);
         }
     }
     void Start()
     {
-        // Aplicamos los cambios guardados en la escena Menu
-        ApplyUserOptions();
+        //Aplicamos las opciones que hemos cambiado en el menu
+        ApplyOptions();
     }
 
-    public void ApplyUserOptions()
+    public void ApplyOptions()
     {
+        //Data persistance de las opiones
         player.material.color = DataPersistence.sharedInstance.color;
         username.text = DataPersistence.sharedInstance.username;
-       // HardModeIsOn.text = DataPersistence.sharedInstance.HardModeIsOn;
+       // HardToggle.text = DataPersistence.sharedInstance.HardToggle;
+        
     }
 }

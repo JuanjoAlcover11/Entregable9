@@ -3,42 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DataPersistence : MonoBehaviour
-{
-    public static DataPersistence sharedInstance;
 
-    // Variables cuyo valor queremos conservar entre escenas:
+{   //Instancia compartida
+    public static DataPersistence sharedInstance;
+    //Delaramos Variables. Nos serviran para conservar los valores entre escenas
     public int colorSelected;
     public Color color;
     public string username;
-    public bool HardModeIsOn;
+    public int HardToggle;
 
     private void Awake()
     {
-        // Si la instancia no existe
+        //Hacemos que si no existe una instancia...
         if (sharedInstance == null)
         {
-            // Configuramos la instancia
             sharedInstance = this;
-            // Nos aseguramos de que no sea destruida con el cambio de escena
+            //...no sea destruida al cambiar la escena
             DontDestroyOnLoad(sharedInstance);
         }
         else
         {
-            // Como ya existe una instancia, destruimos la copia
+            //Si ya existe una instancia, se destruye
             Destroy(this);
         }
     }
+    //Hacemos que se guarden los datos aunque salgamos del juego (para futuras partidas)
     public void SaveForFutureGames()
     {
-        // Color
+        //Los tres colores posibles
         PlayerPrefs.SetInt("COLOR_SELECTED", colorSelected);
         PlayerPrefs.SetFloat("R", color[0]);
         PlayerPrefs.SetFloat("G", color[1]);
         PlayerPrefs.SetFloat("B", color[2]);
 
-        // Nombre de usuario
+        //El nombre del player
         PlayerPrefs.SetString("USERNAME", username);
 
-       // PlayerPrefs.SetBool("HARDMODE", HardModeIsOn);
+        //Modo hardcore
+        PlayerPrefs.SetInt("HARDMODE", HardToggle); ;
     }
 }

@@ -154,8 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorSelected: 0
   color: {r: 0, g: 0, b: 0, a: 0}
-  username: Player
-  HardModeIsOn: 0
+  username: 
+  HardToggle: 0
 --- !u!4 &197263683
 Transform:
   m_ObjectHideFlags: 0
@@ -863,7 +863,7 @@ MonoBehaviour:
   - {fileID: 226193535}
   - {fileID: 1581034700}
   username: {fileID: 306236910}
-  HardModeIsOn: 0
+  toggle: {fileID: 1163800002}
 --- !u!4 &453513689
 Transform:
   m_ObjectHideFlags: 0
@@ -2196,7 +2196,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 453513688}
+        m_TargetAssemblyTypeName: OptionsScript, Assembly-CSharp
+        m_MethodName: HardMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1195256839
 GameObject:
